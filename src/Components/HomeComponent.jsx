@@ -73,6 +73,79 @@ const HomeComponent = () => {
         </div>
       </div>
       {/* ==============BANNER PART END================== */}
+      {/* ================features part start================== */}
+      <div className="max-w-full mx-auto py-12 px-4 sm:px-6 lg:px-8 container">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        {/* Feature 1 */}
+        <div className="text-left flex gap-[20px]">
+          {/* Icon */}
+          <div className="text-pink-500 text-6xl mb-4">
+            <img src="/images/benefit-1.png" className='w-[60px]' alt="" /> {/* Replace this with your actual icon */}
+          </div>
+          {/* Title */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                100% Freshness
+            </h3>
+            {/* Description */}
+            <p className="text-gray-600">
+              Most people are unaware of the less common flower.
+            </p>
+          </div>                      
+        </div>
+
+        {/* Feature 2 */}
+        <div className="text-left flex gap-[20px]">
+          <div className="text-pink-500 text-6xl mb-4">
+            <img src="/images/benefit-2.png" className='w-[60px]' alt="" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Made by artist
+            </h3>
+            {/* Description */}
+            <p className="text-gray-600">
+              Most people are unaware of the less common flower.
+            </p>
+          </div>       
+        </div>
+
+        {/* Feature 3 */}
+        <div className="text-left flex gap-[20px]">
+          <div className="text-pink-500 text-6xl mb-4">
+            <img src="/images/benefit-3.png" className='w-[60px]' alt="" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Own courier
+            </h3>
+            {/* Description */}
+            <p className="text-gray-600 ">
+              Most people are unaware of the less common flower.
+            </p>
+          </div>    
+        </div>
+
+        {/* Feature 4 */}
+        <div className="text-left flex gap-[20px]">
+          <div className="text-pink-500 text-6xl mb-4">
+            <img src="/images/benefit-4.png" className='w-[60px]' alt="" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                100% Freshness
+            </h3>
+            {/* Description */}
+            <p className="text-gray-600">
+              Most people are unaware of the less common flower.
+            </p>
+          </div>    
+        </div>
+      </div>
+    </div>
+
+      {/* ================features part start================== */}
     </>
   );
 };
