@@ -110,9 +110,9 @@ const LoginComponent = () => {
 
           {/* Forget Password Link */}
           <div className="mb-6 text-right">
-            <a href="#" className="text-sm text-pink-500 hover:underline">
+            <Link to="/forgotpass" className="text-sm text-pink-500 hover:underline">
               Forgot Password?
-            </a>
+            </Link>
           </div>
 
           {/* Login Button */}

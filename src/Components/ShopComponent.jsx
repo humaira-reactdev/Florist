@@ -1,8 +1,11 @@
 import React from 'react'
+import HeadingComponent from './HeadingComponent'
 
 const ShopComponent = () => {
   return (
-    <div>ShopComponent</div>
+    <>
+      <HeadingComponent headingText={'Shop'} pageText={'SHOP'}/>
+    </>
   )
 }
 

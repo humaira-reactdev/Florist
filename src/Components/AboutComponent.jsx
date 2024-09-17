@@ -1,8 +1,11 @@
 import React from 'react'
+import HeadingComponent from './HeadingComponent'
 
 const AboutComponent = () => {
   return (
-    <div>AboutComponent</div>
+    <>
+      <HeadingComponent headingText={'About Us'} pageText={'ABOUT'}/>
+    </>
   )
 }
 
