@@ -1,7 +1,7 @@
 import React from 'react'
-
+import { Link, NavLink } from 'react-router-dom';
 import { CiSearch } from "react-icons/ci";
-import { IoMdHeartEmpty } from "react-icons/io";
+import { IoPersonOutline } from "react-icons/io5";
 import { PiHandbag } from "react-icons/pi";
 
 const Navbar = () => {
@@ -16,26 +16,22 @@ const Navbar = () => {
 
         {/* Menu Links */}
         <div className="flex space-x-8">
-          <a href="/" className="text-pink-500 hover:text-black font-semibold">HOME</a>
-          <a href="/about" className="text-black hover:text-pink-500 font-semibold">ABOUT</a>
-          <a href="/services" className="text-black hover:text-pink-500 font-semibold">SERVICES</a>
-          <a href="/shop" className="text-black hover:text-pink-500 font-semibold">SHOP</a>
-          <a href="/pages" className="text-black hover:text-pink-500 font-semibold">PAGES</a>
-          <a href="/blog" className="text-black hover:text-pink-500 font-semibold">BLOG</a>
-          <a href="/contact" className="text-black hover:text-pink-500 font-semibold">CONTACT</a>
+          <NavLink to="/" className={({ isActive }) => isActive? 'text-pink-500 font-semibold':'text-black'}>HOME</NavLink>
+          <NavLink to="/about" className={({ isActive }) => isActive? 'text-pink-500 font-semibold':'text-black'}>ABOUT</NavLink>
+          <NavLink to="/services" className={({ isActive }) => isActive? 'text-pink-500 font-semibold':'text-black'}>SERVICES</NavLink>
+          <NavLink to="/shop" className={({ isActive }) => isActive? 'text-pink-500 font-semibold':'text-black'}>SHOP</NavLink>
+          <NavLink to="/contact" className={({ isActive }) => isActive? 'text-pink-500 font-semibold':'text-black'}>CONTACT</NavLink>
         </div>
 
         {/* Icons */}
         <div className="flex items-center space-x-6 text-[25px]">
           {/* Search Icon */}
-          <CiSearch className=''/>
-          {/* Heart Icon with Item Count */}
-          <IoMdHeartEmpty />         
+          <CiSearch className=''/>    
           {/* Cart Icon with Item Count */}
-          <PiHandbag />       
-
           {/* Cart Total */}
-          
+          <Link to='/cart'><PiHandbag /></Link>
+          <IoPersonOutline />  
+          <Link to='/login' className='text-[15px] font-semibold hover:text-pink-500 hover:underline'>Sign in</Link>  
         </div>
       </div>
     </nav>
