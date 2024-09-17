@@ -89,7 +89,7 @@ const SignupComponent = () => {
           {/* Logo and Login Link */}
           <div className='mb-6'>
             <div className='text-2xl font-bold text-pink-500'>
-                <img src="/images/logo.png" alt="logo" className='w-[150px] mb-[15px] mx-auto'/>
+                <Link to='/'><img src="/images/logo.png" alt="logo" className='w-[150px] mb-[15px] mx-auto'/></Link>
             </div>
             <p className='font-semibold text-center mb-[5px]'>Sign up to continue</p>
             <p className='text-center text-[13px]'>Already have an account? <Link to='/login' className='text-[12px] text-blue-500 hover:underline'>Login</Link></p>

@@ -60,7 +60,7 @@ const LoginComponent = () => {
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
         {/* Logo */}
         <div className="flex justify-center mb-8">
-          <img src="/images/logo.png" alt="Logo" className="w-35" />
+          <Link to='/'><img src="/images/logo.png" alt="Logo" className="w-35" /></Link>
         </div>
 
         {/* Login Form */}
@@ -127,7 +127,7 @@ const LoginComponent = () => {
         <div className="mt-6 text-center">
             <p className="text-gray-700 text-sm">
               Don't have an account?{' '}
-              <Link to='' className="text-pink-500 hover:underline">
+              <Link to='/signup' className="text-pink-500 hover:underline">
                 Sign up
               </Link>
             </p>

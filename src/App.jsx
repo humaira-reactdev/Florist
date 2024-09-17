@@ -4,6 +4,11 @@ import LayoutOne from './Layouts/LayoutOne'
 import Homepage from './Pages/Homepage'
 import LoginPage from './Pages/LoginPage'
 import SignupPage from './Pages/SignupPage'
+import ContactPage from './Pages/ContactPage'
+import ShopPage from './Pages/ShopPage'
+import AboutPage from './Pages/AboutPage'
+import ServicesPage from './Pages/ServicesPage'
+import CartPage from './Pages/CartPage'
 
 function App() {
 
@@ -12,9 +17,16 @@ function App() {
       <Route>
         <Route path='/' element={<LayoutOne/>}>
           <Route index element = {<Homepage/>}/>
+          <Route path='/contact' element={<ContactPage/>}/>
+          <Route path='/shop' element={<ShopPage/>}/>
+          <Route path='/about' element={<AboutPage/>}/>
+          <Route path='/services' element={<ServicesPage/>}/>
+          <Route path='/cart' element={<CartPage/>}/>
+
         </Route>
         <Route path='/login' element={<LoginPage/>}/>
         <Route path='/signup' element={<SignupPage/>}/>
+        
       </Route>
     )
   )
