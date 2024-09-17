@@ -3,6 +3,7 @@ import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } 
 import LayoutOne from './Layouts/LayoutOne'
 import Homepage from './Pages/Homepage'
 import LoginPage from './Pages/LoginPage'
+import SignupPage from './Pages/SignupPage'
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
           <Route index element = {<Homepage/>}/>
         </Route>
         <Route path='/login' element={<LoginPage/>}/>
+        <Route path='/signup' element={<SignupPage/>}/>
       </Route>
     )
   )
