@@ -1,8 +1,12 @@
 import React from 'react';
 
-const ServiceCardComponent = ({ icon, title, description }) => {
+const ServiceCardComponent = ({ icon, title, description, onClick, isActive }) => {
   return (
-    <div className="border border-pink-100 p-8 text-center hover:shadow-lg transition-shadow duration-300">
+    <div 
+    onClick={onClick}
+    className={`p-4 border rounded-lg cursor-pointer transition-all duration-300 ${
+      isActive ? 'border-pink-500' : 'border-gray-300'
+    } hover:shadow-md text-center`}>
       <div className="flex justify-center mb-4 text-pink-500">
         {/* Icon placeholder */}
         {icon}

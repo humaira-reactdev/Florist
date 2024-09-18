@@ -91,7 +91,7 @@ const AboutComponent = () => {
         />
       </div>
     </div>
-      {/* =================SERVICES SECTION STARt END============== */}
+      {/* =================SERVICES SECTION END============== */}
       {/* ==================TESTIMONIAL START====================== */}
       <div className="relative py-16 bg-[#f8f9fa]">
       {/* Left and Right Decorative Images */}
