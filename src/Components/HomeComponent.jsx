@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import FooterComponent from './FooterComponent';
 
 const HomeComponent = () => {
   // Array to store image URLs and corresponding banner text
@@ -317,7 +318,8 @@ const HomeComponent = () => {
       </div>
     </div>
       {/* ================testimonial end================== */}
-
+      {/* Footer */}
+      <FooterComponent/>
 
     </>
   );
