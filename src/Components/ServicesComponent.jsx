@@ -31,7 +31,27 @@ const ServicesComponent = () => {
     setSelectedService(serviceTitle);
   };
 
-  
+  // State for form fields
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    service: '',
+    message: '',
+  });
+
+  // Handle form input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Form data:', formData);
+  };
+
   return (
     <>
       <HeadingComponent headingText={'Our services'} pageText={'SERVICES'} />
@@ -73,7 +93,7 @@ const ServicesComponent = () => {
           <p className="text-gray-600 mb-6">{serviceDetails[selectedService].description}</p>
           
           {/* List of services or features */}
-          <ul className='space-y-2'>
+          <ul className='space-y-2 mb-8'>
             <li className='flex items-center'>
               <span className='mr-2 text-pink-500'>•</span>
               Free initial consulting for floral design.
@@ -93,7 +113,67 @@ const ServicesComponent = () => {
           </ul>
         </div>
       </div>
-       
+
+      {/* Quote Form Section */}
+      <div className='flex justify-center mt-8'>
+        <form
+          className='max-w-md w-full bg-gray-200 p-8 rounded-lg shadow-md'
+          onSubmit={handleSubmit}
+        >
+          <h2 className='text-2xl font-bold mb-4 text-center'>GET A QUOTE</h2>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
+            <input
+              type='text'
+              name='name'
+              placeholder='Name'
+              value={formData.name}
+              onChange={handleInputChange}
+              className='p-2 border border-gray-300 rounded-md w-full'
+            />
+            <input
+              type='text'
+              name='phone'
+              placeholder='Phone'
+              value={formData.phone}
+              onChange={handleInputChange}
+              className='p-2 border border-gray-300 rounded-md w-full'
+            />
+            <input
+              type='email'
+              name='email'
+              placeholder='Email'
+              value={formData.email}
+              onChange={handleInputChange}
+              className='p-2 border border-gray-300 rounded-md w-full'
+            />
+            <select
+              name='service'
+              value={formData.service}
+              onChange={handleInputChange}
+              className='p-2 border border-gray-300 rounded-md w-full'
+            >
+              <option value=''>Type services</option>
+              <option value='Custom orders'>Custom orders</option>
+              <option value='Event decoration'>Event decoration</option>
+              <option value='Green landscape'>Green landscape</option>
+            </select>
+          </div>
+          <textarea
+            name='message'
+            placeholder='Message'
+            value={formData.message}
+            onChange={handleInputChange}
+            className='p-2 border border-gray-300 rounded-md w-full mb-4'
+            rows='4'
+          ></textarea>
+          <button
+            type='submit'
+            className='w-full bg-black text-white py-2 rounded-md'
+          >
+            SEND
+          </button>
+        </form>
+      </div>
     </>
   );
 };
