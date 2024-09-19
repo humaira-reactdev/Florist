@@ -105,10 +105,6 @@ const ContactComponent = () => {
       </div>
 
       {/* Follow Us Component */}
-      <FollowUscomponent />
-
-      {/* Footer Component */}
-      <FooterComponent />
     </div>
   );
 };

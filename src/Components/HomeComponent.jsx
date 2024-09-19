@@ -319,8 +319,6 @@ const HomeComponent = () => {
     </div>
       {/* ================testimonial end================== */}
       {/* Footer */}
-      <FooterComponent/>
-
     </>
   );
 };
