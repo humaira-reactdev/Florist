@@ -69,23 +69,31 @@ const SignupComponent = () => {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    const { email, password, name } = formData; // Destructure formData to get email, password, and name
+    
     if (validateStep()) {
       createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-      // Signed up 
-      updateProfile(auth.currentUser, {
-        displayName: username,
-        photoURL: "https://static.vecteezy.com/system/resources/previews/036/280/651/non_2x/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg"
+        // Signed up 
+        updateProfile(auth.currentUser, {
+          displayName: name, // Update display name using formData.name
+          photoURL: "https://static.vecteezy.com/system/resources/previews/036/280/651/non_2x/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg"
+        })
+        const user = userCredential.user;
+        
+        console.log('signed up');
+        console.log('Form Submitted:', formData);
+        
+        // Navigate to home page after successful signup
+        navigate('/');
       })
-      const user = userCredential.user;
-      // ...
-      console.log('signed up')
-      console.log('Form Submitted:', formData);
-      navigate('/')
-    })
-      
+      .catch((error) => {
+        console.error("Error during signup:", error);
+      });
     }
-  };
+};
+
 
   // Form validation
   const validateStep = () => {
