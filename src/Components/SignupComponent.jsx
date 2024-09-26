@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
 import { FaUser, FaEnvelope, FaPhone, FaHome, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa'; // Import icons
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { app } from '../firebase.config';
+import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
 
 const SignupComponent = () => {
+
+  // custom hooks
+  const navigate=useNavigate()
+
+  //firebase variables
+  const auth = getAuth(app);
+
+
   // State to track the current step
   const [step, setStep] = useState(1);
 
@@ -36,7 +46,6 @@ const SignupComponent = () => {
       ...formData,
       [name]: value,
     });
-    // Clear errors when user starts typing
     setErrors({
       ...errors,
       [name]: '',
@@ -61,7 +70,20 @@ const SignupComponent = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateStep()) {
+      createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+      // Signed up 
+      updateProfile(auth.currentUser, {
+        displayName: username,
+        photoURL: "https://static.vecteezy.com/system/resources/previews/036/280/651/non_2x/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg"
+      })
+      const user = userCredential.user;
+      // ...
+      console.log('signed up')
       console.log('Form Submitted:', formData);
+      navigate('/')
+    })
+      
     }
   };
 
