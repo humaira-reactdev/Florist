@@ -87,6 +87,7 @@ const SignupComponent = () => {
         
         // Navigate to home page after successful signup
         navigate('/');
+        sendEmailVerification(auth.currentUser)
       })
       .catch((error) => {
         console.error("Error during signup:", error);

@@ -1,11 +1,19 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { app } from '../firebase.config';
+import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
 
 const LoginComponent = () => {
+  // ====custom hooks===//
     const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState({ email: '', password: '' });
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [errors, setErrors] = useState({ email: '', password: '' });
+    const navigate=useNavigate()
+
+    // ==================firebase variables====================//
+    const auth = getAuth(app);
+
 
   // Email validation regex
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -13,7 +21,6 @@ const LoginComponent = () => {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-
     // Form validation
     let validationErrors = {};
     if (!email) {
@@ -30,7 +37,9 @@ const LoginComponent = () => {
 
     // If no errors, proceed with login (e.g., send data to server)
     if (Object.keys(validationErrors).length === 0) {
+      signInWithEmailAndPassword(auth, email, password)
       console.log('Form submitted:', { email, password });
+      navigate('/')
     }
   };
 
@@ -117,7 +126,7 @@ const LoginComponent = () => {
 
           {/* Login Button */}
           <button
-            type="submit"
+            type="submit" onClick={handleSubmit}
             className="w-full bg-pink-500 text-white py-2 rounded-md hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500"
           >
             Login
