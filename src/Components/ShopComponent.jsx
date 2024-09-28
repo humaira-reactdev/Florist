@@ -79,7 +79,7 @@ const ShopComponent = () => {
             </div>
           ))
         ) : (
-          <p className="text-center text-gray-600">Loading products...</p>
+          <p className="text-center text-gray-600">Loading products....</p>
         )}
       </div>
     </div>
