@@ -58,6 +58,8 @@ const LoginComponent = () => {
           uid: user.uid,
           email: user.email,
           displayName: user.displayName,
+          // address: user.address,
+          // phone: user.phone
         };
   
         // Dispatch serializable user data to Redux
@@ -70,6 +72,8 @@ const LoginComponent = () => {
         set(ref(db, 'AllUsers/' + user.uid), {
           userName: user.displayName,
           userID: user.uid,
+          // address: user.address,
+          // phone: user.phone
         })
         .then(() => {
           console.log("Data saved successfully.");
