@@ -1,24 +1,48 @@
 import HeadingComponent from './HeadingComponent';
-import FooterComponent from './FooterComponent';
-import FollowUscomponent from './FollowUscomponent';
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import { useState } from 'react';
 
 const ContactComponent = () => {
-  const [email, setEmail]           = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [email, setEmail]                = useState('');
+  const [emailError, setEmailError]      = useState('');
+  const [message, setMessage]            = useState('');
+  const [messageError, setMessageError]  = useState('');
 
-  // Function to handle email validation
-  const validateEmail = (e) => {
-    const inputEmail = e.target.value;
-    setEmail(inputEmail);
+  // Email validation
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    setEmailError('');
+  };
 
-    // Show error if the email field is empty
-    if (inputEmail === '') {
+  // Message change
+  const handleMessageChange = (e) => {
+    setMessage(e.target.value);
+    setMessageError('')
+  };
+
+  // Form validation
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent page refresh
+
+    // Validate email
+    if (!email) {
       setEmailError('Email is required');
-    } else {
-      setEmailError(''); // Clear the error if email is entered
+    }else {
+      if (!message){
+        setMessageError('Message is required');
+        return;
+      }
     }
+
+    // Optionally add more validation (e.g., regex for email format)
+
+    // Handle form submission (e.g., send data to an API)
+    console.log('Email:', email);
+    console.log('Message:', message);
+
+    // Clear form after submission
+    setEmail('');
+    setMessage('');
   };
 
   return (
@@ -61,26 +85,31 @@ const ContactComponent = () => {
               {/* Middle section: Contact Form */}
               <div className="col-span-1">
                 <h2 className="text-4xl font-bold mb-6">Contact us</h2>
-                <form className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <input
                     type="email"
                     placeholder="Email"
                     value={email}
-                    onChange={validateEmail} // Call the validation function on change
+                    onChange={handleEmailChange} // Call the validation function on change
                     className={`w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-400 ${emailError && 'border-red-500'}`}
                   />
                   {/* Displaying error message */}
-                  {emailError && <p className="text-red-500">{emailError}</p>}
+                  <p className="text-red-500">{emailError}</p>
 
                   <textarea
-                    rows="5"
+                    rows="3"
                     placeholder="Message"
+                    value={message}
+                    onChange={handleMessageChange}
                     className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
                   ></textarea>
+
+                  {/* Displaying error message */}
+                   <p className="text-red-500">{messageError}</p>
+
                   <button
                     type="submit"
                     className="bg-black text-white font-bold py-3 px-6 rounded hover:bg-gray-800"
-                    disabled={!email || emailError} // Disable the button if no email or there's an error
                   >
                     SEND
                   </button>
@@ -103,10 +132,9 @@ const ContactComponent = () => {
           </div>
         </div>
       </div>
-
-      {/* Follow Us Component */}
     </div>
   );
 };
 
 export default ContactComponent;
+
