@@ -84,7 +84,7 @@ const SignupComponent = () => {
           photoURL: "https://static.vecteezy.com/system/resources/previews/036/280/651/non_2x/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg"
         })
         // toast message when signed up successfully
-        toast.success('Signed up successfully', {
+        toast.success('Signed up successfully. Please check your email.', {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -101,7 +101,7 @@ const SignupComponent = () => {
         console.log('Form Submitted:', formData);
         
         // Navigate to home page after successful signup
-        navigate('/');
+        navigate('/login');
         sendEmailVerification(auth.currentUser)
       })
       .catch((error) => {

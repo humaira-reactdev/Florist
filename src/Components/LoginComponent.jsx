@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { app } from '../firebase.config';
 import { getAuth, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 
+
 const LoginComponent = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -54,6 +55,7 @@ const LoginComponent = () => {
       } catch (error) {
         // Handle authentication errors
         setErrors((prevErrors) => ({ ...prevErrors, general: error.message }));
+
       }
     }
   };
