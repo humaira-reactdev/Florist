@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { app } from '../firebase.config';
-import { getAuth, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
+import { useDispatch } from 'react-redux';
+import { userData } from '../Slice/UserSlice';
+import { getDatabase, ref, set} from 'firebase/database';
 
 
 const LoginComponent = () => {
@@ -10,7 +13,10 @@ const LoginComponent = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({ email: '', password: '', general: '' });
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   
+  // firebase variables========//
+  const db = getDatabase(app);
   const auth = getAuth(app);
 
   // Email validation regex
@@ -20,46 +26,64 @@ const LoginComponent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Clear any previous general error
     setErrors({ ...errors, general: '' });
-
-    // Form validation
+  
     let validationErrors = {};
     if (!email) {
       validationErrors.email = 'Email is required.';
     } else if (!emailRegex.test(email)) {
       validationErrors.email = 'Invalid email format.';
     }
-
+  
     if (!password) {
       validationErrors.password = 'Password is required.';
     }
-
+  
     setErrors(validationErrors);
-
-    // If no errors, proceed with login
+  
     if (Object.keys(validationErrors).length === 0) {
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        
-        // Check if the email is verified
+  
         if (!user.emailVerified) {
-          // If the email is not verified, sign out and show an error
           await auth.signOut();
           setErrors((prevErrors) => ({ ...prevErrors, general: 'Email is not verified. Please check your inbox.' }));
         } else {
-          // If the email is verified, navigate to the home page
           navigate('/');
         }
+  
+        // Extract serializable fields from Firebase user object
+        const serializableUser = {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+        };
+  
+        // Dispatch serializable user data to Redux
+        dispatch(userData(serializableUser));
+  
+        // Store serialized data to local storage
+        localStorage.setItem('userData', JSON.stringify(serializableUser));
+  
+        // Send data to Firebase Realtime Database
+        set(ref(db, 'AllUsers/' + user.uid), {
+          userName: user.displayName,
+          userID: user.uid,
+        })
+        .then(() => {
+          console.log("Data saved successfully.");
+        })
+        .catch((error) => {
+          console.error("Error saving data: ", error);
+        });
+  
       } catch (error) {
-        // Handle authentication errors
         setErrors((prevErrors) => ({ ...prevErrors, general: error.message }));
-
       }
     }
   };
-
+  
   // Handle input change for email
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
