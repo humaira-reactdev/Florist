@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { CiSearch } from "react-icons/ci";
 import { IoPersonOutline } from "react-icons/io5";
 import { PiHandbag } from "react-icons/pi";
+import { CiHeart } from "react-icons/ci";
 
 const Navbar = () => {
   return (
@@ -28,6 +29,7 @@ const Navbar = () => {
           {/* Search Icon */}
           <CiSearch className=''/>    
           {/* Cart Icon with Item Count */}
+          <CiHeart className=''/>  
           {/* Cart Total */}
           <Link to='/cart'><PiHandbag /></Link>
           <IoPersonOutline />  
