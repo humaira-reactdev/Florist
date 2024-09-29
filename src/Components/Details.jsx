@@ -3,6 +3,8 @@ import { FiMinus, FiPlus } from 'react-icons/fi'; // Icons for increment and dec
 import HeadingComponent from './HeadingComponent';
 
 const Details = () => {
+
+  
   return (
     <>
       <HeadingComponent headingText="Product detail" pageText="Product detail" />
