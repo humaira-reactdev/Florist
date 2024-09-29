@@ -9,6 +9,7 @@ import AboutPage from './Pages/AboutPage'
 import ServicesPage from './Pages/ServicesPage'
 import CartPage from './Pages/CartPage'
 import ForgotPasswordPage from './Pages/ForgotPasswordPage'
+import { ToastContainer } from 'react-toastify'
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
   return (
     <>
        <RouterProvider router={route}/> 
+       <ToastContainer />    
     </>
   )
 }
