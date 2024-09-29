@@ -15,7 +15,7 @@ const Details = () => {
             {/* Main Image */}
             <div className="w-[500px] h-[700px] mx-auto">
               <img
-                src="https://via.placeholder.com/400" // Replace with actual image URL
+                src="https://via.placeholder.com/400" 
                 alt="Main product"
                 className="w-full h-full object-cover"
               />

@@ -4,11 +4,22 @@ import HeadingComponent from './HeadingComponent';
 import products from '../ProductData.js';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { productData } from '../Slice/ProductSlice.js';
+
+
+
+
+
 
 const ShopComponent = () => {
   const [visibleCount, setVisibleCount]     = useState(9);
   const [sortedProducts, setSortedProducts] = useState(products.slice(0, 9));
   const navigate                            = useNavigate()
+
+
+  // getting data from redux 
+  const dispatch = useDispatch()
 
   const loadMoreProducts = () => {
     const newVisibleCount = visibleCount + 9;
@@ -35,8 +46,9 @@ const ShopComponent = () => {
   };
 
 // ============= add to cart funtion
-  const handleCart = () =>{
+  const handleCart = (data) =>{
     navigate('/cart')
+    dispatch(productData(data));
   }
 
 
@@ -126,7 +138,7 @@ const ShopComponent = () => {
                 <div className="flex gap-2 mt-2 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
                   {/* ========== add buttons ========= */}
                   <button 
-                   onClick={handleCart}
+                   onClick={()=>handleCart(product)}
                    className="bg-pink-600 text-white py-1 px-3 rounded transition duration-300 transform hover:scale-105 hover:bg-white hover:text-pink-600  hover:shadow-lg hover:border hover:border-pink-600">
                     Add to Cart
                   </button>
