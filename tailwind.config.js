@@ -8,7 +8,7 @@ export default {
     extend: {
       container: {
         center: true,  // Center the container by default
-        padding: '1rem',  // Add padding around the container
+        padding: '50px',  // Add padding around the container
         screens: {
           sm: '100%',     // Full width on small screens
           md: '728px',    // Custom width on medium screens
