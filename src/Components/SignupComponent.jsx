@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { FaUser, FaEnvelope, FaPhone, FaHome, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa'; // Import icons
 import { Link, useNavigate } from 'react-router-dom';
 import { app } from '../firebase.config';
-import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
+import {getAuth,  createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
+import { Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 
 const SignupComponent = () => {
 
@@ -80,6 +83,18 @@ const SignupComponent = () => {
           displayName: name, // Update display name using formData.name
           photoURL: "https://static.vecteezy.com/system/resources/previews/036/280/651/non_2x/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg"
         })
+        // toast message when signed up successfully
+        toast.success('Signed up successfully', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+          });
         const user = userCredential.user;
         
         console.log('signed up');
@@ -90,6 +105,18 @@ const SignupComponent = () => {
         sendEmailVerification(auth.currentUser)
       })
       .catch((error) => {
+        // toast message when failed to create account
+        toast.error('Error signing up', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+          });
         console.error("Error during signup:", error);
       });
     }
