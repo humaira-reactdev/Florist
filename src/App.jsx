@@ -13,6 +13,7 @@ import { ToastContainer } from 'react-toastify'
 import DetailsPage from './Pages/DetailsPage'
 import ReviewPage from './Pages/ReviewPage'
 import ShippingPage from './Pages/shippingPage'
+import CheckoutPage from './Pages/CheckoutPage'
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
           <Route path='/details' element={<DetailsPage/>}/>
           <Route path='/review'  element={<ReviewPage/>}/>
           <Route path='/shipping' element={<ShippingPage/>}/>
+          <Route path='/checkout'  element={<CheckoutPage/>}/>
         </Route>
         <Route path='/login' element={<LoginPage/>}/>
         <Route path='/signup' element={<SignupPage/>}/>

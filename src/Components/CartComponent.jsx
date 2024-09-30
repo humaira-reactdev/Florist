@@ -1,56 +1,99 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 import HeadingComponent from './HeadingComponent';
 import { useNavigate } from 'react-router-dom';
+import { getDatabase, ref, onValue, remove, set } from "firebase/database";
 
 const CartComponent = () => {
   const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [quantities, setQuantities] = useState({});
 
-  // Getting data from Redux - handling a list of products
-  const userData = useSelector((state) => state.counter.value);
+  // Setting up Firebase
+  const db = getDatabase();
 
-  // Local state to manage cart items
-  const [cartItems, setCartItems] = useState(userData ? [userData] : []);
+  // Fetching product data from Firebase
+  useEffect(() => {
+    const starCountRef = ref(db, 'cartProduct/');
+    onValue(starCountRef, (snapshot) => {
+      let arr = [];
+      snapshot.forEach((item) => {
+        // Check if the product already exists in the cart
+        if (!arr.some(product => product.key === item.key)) {
+          arr.push({ ...item.val(), key: item.key });
+          setQuantities((prev) => ({ ...prev, [item.key]: prev[item.key] || 1 })); // Set initial quantity
+        }
+      });
+      setProducts(arr);
+    });
+  }, [db]);
 
-  // Calculate subtotal
-  const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-
-  // Handle quantity change
-  const handleQuantityChange = (id, amount) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, quantity: Math.max(1, item.quantity + amount) } : item
-      )
-    );
+  // Increment product quantity
+  const handleIncrement = (id) => {
+    setQuantities((prev) => ({ ...prev, [id]: (prev[id] || 1) + 1 }));
   };
 
-  // Handle item removal
-  const handleRemoveItem = (id) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  // Decrement product quantity
+  const handleDecrement = (id) => {
+    setQuantities((prev) => {
+      const currentQuantity = prev[id] || 1;
+      if (currentQuantity > 1) {
+        return { ...prev, [id]: currentQuantity - 1 };
+      }
+      return prev;
+    });
   };
 
-  // Handle continue shopping
-  const handleShop = () => {
+  // Add more products
+  const handleAddMoreProduct = () => {
     navigate('/shop');
   };
 
-  // Handle adding products to cart
-  const addProductToCart = (newProduct) => {
-    setCartItems((prevItems) => {
-      const existingItem = prevItems.find((item) => item.id === newProduct.id);
-      if (existingItem) {
-        return prevItems.map((item) =>
-          item.id === newProduct.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      } else {
-        return [...prevItems, newProduct];
-      }
+  // Calculate total price based on product quantity
+  const totalPrice = products.reduce((total, item) => {
+    return total + (item.price * (quantities[item.key] || 1));
+  }, 0);
+
+  // Handle item removal
+  const handleRemoveItem = (id) => {
+    setProducts((prevItems) => prevItems.filter((item) => item.key !== id));
+    setQuantities((prev) => {
+      const updatedQuantities = { ...prev };
+      delete updatedQuantities[id];
+      return updatedQuantities;
     });
+
+    // Remove data from Firebase
+    remove(ref(db, 'cartProduct/' + id));
   };
 
   // Handle updating the cart
   const handleUpdateCart = () => {
-    setCartItems([...cartItems]); // This will trigger a re-render of the cart
+    setProducts([...products]); // Re-render the cart
+  };
+
+  // Handle checkout
+  const handleCheckout = () => {
+    // Prepare the cart details
+    const cartDetails = {
+      products: products.map(item => ({
+        id: item.key,
+        name: item.name,
+        price: item.price,
+        quantity: quantities[item.key] || 1,
+      })),
+      subtotal: totalPrice.toFixed(2),
+      total: totalPrice.toFixed(2), 
+    };
+
+    // Sending data to Firebase before navigating
+    set(ref(db, 'checkoutProduct/'), cartDetails)
+      .then(() => {
+        // Redirect to checkout page
+        navigate('/checkout');
+      })
+      .catch((error) => {
+        console.error('Error writing to Firebase:', error);
+      });
   };
 
   return (
@@ -69,8 +112,8 @@ const CartComponent = () => {
               </tr>
             </thead>
             <tbody>
-              {cartItems.map((item) => (
-                <tr className="border-b" key={item.id}>
+              {products.map((item) => (
+                <tr className="border-b" key={item.key}>
                   <td className="py-4 flex items-center gap-4">
                     <img
                       src={item.img}
@@ -86,24 +129,24 @@ const CartComponent = () => {
                     <div className="flex items-center gap-2">
                       <button
                         className="text-xl"
-                        onClick={() => handleQuantityChange(item.id, -1)}
+                        onClick={() => handleDecrement(item.key)}
                       >
                         -
                       </button>
-                      <span>{item.quantity}</span>
+                      <span>{quantities[item.key]}</span>
                       <button
                         className="text-xl"
-                        onClick={() => handleQuantityChange(item.id, 1)}
+                        onClick={() => handleIncrement(item.key)}
                       >
                         +
                       </button>
                     </div>
                   </td>
-                  <td className="py-4">${(item.price * item.quantity)?.toFixed(2)}</td>
+                  <td className="py-4">${(item.price * quantities[item.key])?.toFixed(2)}</td>
                   <td className="py-4">
                     <button
                       className="text-pink-500 text-xl"
-                      onClick={() => handleRemoveItem(item.id)}
+                      onClick={() => handleRemoveItem(item.key)}
                     >
                       ×
                     </button>
@@ -115,9 +158,11 @@ const CartComponent = () => {
 
           {/* Cart Actions */}
           <div className="flex justify-between items-center mt-4">
-            <button onClick={handleShop} className="text-pink-500">← CONTINUE SHOPPING</button>
+            <button onClick={handleAddMoreProduct} className="text-pink-500">
+              ← CONTINUE SHOPPING
+            </button>
             <div className="flex gap-4">
-              <button className="text-pink-500" onClick={() => setCartItems([])}>
+              <button className="text-pink-500" onClick={() => setProducts([])}>
                 🗑 CLEAR SHOPPING CART
               </button>
               <button className="text-pink-500" onClick={handleUpdateCart}>⟳ UPDATE CART</button>
@@ -135,7 +180,9 @@ const CartComponent = () => {
               placeholder="Your code here"
               className="w-full p-2 border rounded mt-2"
             />
-            <button className="w-full bg-black text-white p-2 rounded mt-2">APPLY</button>
+            <button className="w-full bg-black text-white p-2 rounded mt-2">
+              APPLY
+            </button>
           </div>
 
           {/* Cart Total */}
@@ -143,13 +190,17 @@ const CartComponent = () => {
             <h2 className="text-2xl font-bold mb-4">Cart Total</h2>
             <div className="flex justify-between mb-2">
               <p>Subtotal</p>
-              <p>${subtotal.toFixed(2)}</p>
+              <p>${totalPrice.toFixed(2)}</p>
             </div>
             <div className="flex justify-between mb-4">
               <p>Total</p>
-              <p className="text-pink-500">${subtotal.toFixed(2)}</p>
+              <p className="text-pink-500">${totalPrice.toFixed(2)}</p>
             </div>
-            <button className="w-full bg-black text-white p-2 rounded">PROCEED TO CHECKOUT</button>
+            <button
+              onClick={handleCheckout}
+              className="w-full bg-black text-white p-2 rounded">
+              PROCEED TO CHECKOUT
+            </button>
           </div>
         </div>
       </div>
