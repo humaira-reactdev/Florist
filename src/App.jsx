@@ -11,6 +11,8 @@ import CartPage from './Pages/CartPage'
 import ForgotPasswordPage from './Pages/ForgotPasswordPage'
 import { ToastContainer } from 'react-toastify'
 import DetailsPage from './Pages/DetailsPage'
+import ReviewPage from './Pages/ReviewPage'
+import ShippingPage from './Pages/shippingPage'
 
 function App() {
 
@@ -25,6 +27,8 @@ function App() {
           <Route path='/services' element={<ServicesPage/>}/>
           <Route path='/cart' element={<CartPage/>}/>
           <Route path='/details' element={<DetailsPage/>}/>
+          <Route path='/review'  element={<ReviewPage/>}/>
+          <Route path='/shipping' element={<ShippingPage/>}/>
         </Route>
         <Route path='/login' element={<LoginPage/>}/>
         <Route path='/signup' element={<SignupPage/>}/>
