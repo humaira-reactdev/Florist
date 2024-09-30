@@ -1,10 +1,22 @@
-import { AiOutlineShoppingCart, AiOutlineHeart } from 'react-icons/ai'; // Icons for cart and heart
-import { FiMinus, FiPlus } from 'react-icons/fi'; // Icons for increment and decrement
+import { AiOutlineShoppingCart, AiOutlineHeart } from 'react-icons/ai';
+import { FiMinus, FiPlus } from 'react-icons/fi'; 
 import HeadingComponent from './HeadingComponent';
+import { useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import { useState } from 'react';
 
 const Details = () => {
-
+  // Getting data from Redux 
+  const productSlice = useSelector((state) => state.counter.value);
   
+  // State for active tab
+  const [activeTab, setActiveTab] = useState('description'); // Default to 'description'
+
+  // Function to handle tab click
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
   return (
     <>
       <HeadingComponent headingText="Product detail" pageText="Product detail" />
@@ -15,41 +27,26 @@ const Details = () => {
             {/* Main Image */}
             <div className="w-[500px] h-[700px] mx-auto">
               <img
-                src="https://via.placeholder.com/400" 
-                alt="Main product"
+                src={productSlice?.img}
+                alt={productSlice?.name}
                 className="w-full h-full object-cover"
               />
             </div>
             {/* Thumbnails */}
             <div className="flex flex-col space-y-5">
               <img
-                src="https://via.placeholder.com/80"
-                alt="thumbnail 1"
+                src={productSlice?.img2}
+                alt={productSlice?.name}
                 className="w-16 h-16 object-cover"
               />
               <img
-                src="https://via.placeholder.com/80"
-                alt="thumbnail 2"
+                src={productSlice?.img3}
+                alt={productSlice?.name}
                 className="w-16 h-16 object-cover"
               />
               <img
-                src="https://via.placeholder.com/80"
-                alt="thumbnail 3"
-                className="w-16 h-16 object-cover"
-              />
-              <img
-                src="https://via.placeholder.com/80"
-                alt="thumbnail 3"
-                className="w-16 h-16 object-cover"
-              />
-              <img
-                src="https://via.placeholder.com/80"
-                alt="thumbnail 3"
-                className="w-16 h-16 object-cover"
-              />
-              <img
-                src="https://via.placeholder.com/80"
-                alt="thumbnail 3"
+                src={productSlice?.img4}
+                alt={productSlice?.name}
                 className="w-16 h-16 object-cover"
               />
             </div>
@@ -59,8 +56,8 @@ const Details = () => {
           <div className="flex flex-col space-y-4">
             {/* Product Title and Price */}
             <div className="flex items-center justify-between">
-              <h1 className="text-4xl font-bold">Fly Me To The Moon</h1>
-              <p className="text-pink-500 text-3xl font-semibold">$34.00</p>
+              <h1 className="text-4xl font-bold">{productSlice?.name}</h1>
+              <p className="text-pink-500 text-3xl font-semibold">{productSlice?.price}</p>
             </div>
 
             {/* Reviews */}
@@ -72,7 +69,7 @@ const Details = () => {
                 ))}
               </div>
               <div className="flex items-center space-x-2">
-                <p className="text-lg text-gray-600">(03 reviews)</p>
+                <p className="text-lg text-gray-600">(reviews)</p>
                 <a href="#" className="text-lg text-pink-500">Write a review</a>
               </div>
             </div>
@@ -81,15 +78,14 @@ const Details = () => {
 
             {/* Product Details */}
             <div className="text-black pt-8 pb-8">
-              <p className="text-lg font-thin">Categories: <span className="text-gray-900 font-normal text-md"> Succulent</span></p>
-              <p className="text-lg font-thin">Product code: <span className="text-gray-900 font-normal text-md">PM 101</span></p>
-              <p className="text-lg font-thin">Reward points: <span className="text-gray-900 font-normal text-md">30</span></p>
-              <p className="text-lg font-thin">Availability: <span className="text-green-500 font-normal text-md">In Stock</span></p>
+              <p className="text-lg font-thin">Categories: <span className="text-gray-900 font-normal text-md">{productSlice?.category}</span></p>
+              <p className="text-lg font-thin">Product code: <span className="text-gray-900 font-normal text-md">{productSlice?.productCode}</span></p>
+              <p className="text-lg font-thin">Reward points: <span className="text-gray-900 font-normal text-md">{productSlice?.rewardPoints}</span></p>
+              <p className="text-lg font-thin">Availability: <span className="text-green-500 font-normal text-md">{productSlice?.stock}</span></p>
             </div>
 
-
-        
             <hr />
+
             {/* Quantity Selector and Add to Cart Button */}
             <div className="flex items-center space-x-6 pt-8 pb-8">
               <div className="flex items-center border border-gray-300 rounded-full overflow-hidden">
@@ -117,27 +113,46 @@ const Details = () => {
               </button>
             </div>
              
-            <hr/>
+            <hr />
                
-              {/* Tabs: Description, Shipping & Returns, Reviews */}
-              <div className="pt-[50px]">
-                <div className="flex items-center flex-wrap space-x-6 text-[20px] font-normal">
-                  <p>Description</p>
-                  <div className="w-[2px] h-8 bg-gray-300 rotate-[25deg]"></div>
-                  <p>Shipping & Returns</p>
-                  <div className="w-[2px] h-8 bg-gray-300 rotate-[25deg]"></div>
-                  <p>Reviews (03)</p>
-                </div>
-
-
-                {/* Placeholder content */}
-                <div className="mt-6 text-gray-600 w-[400px]">
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
+        {/* Tabs: Description, Shipping & Returns, Reviews */}
+            <div className="pt-[50px]">
+              <div className="flex items-center flex-wrap space-x-6 text-[20px] font-normal">
+                <NavLink 
+                  to="/description" 
+                  className={`hover:text-pink-500 ${activeTab === 'description' ? 'text-pink-500 font-bold' : 'text-gray-800'}`} 
+                  onClick={() => handleTabClick('description')}
+                >
+                  Description
+                </NavLink>
+                <div className="w-[2px] h-8 bg-gray-300 rotate-[25deg]"></div>
+                <NavLink 
+                  to="/shipping" 
+                  className={`hover:text-pink-500 ${activeTab === 'shipping-returns' ? 'text-pink-500 font-bold' : 'text-gray-800'}`} 
+                  onClick={() => handleTabClick('shipping-returns')}
+                >
+                  Shipping & Returns
+                </NavLink>
+                <div className="w-[2px] h-8 bg-gray-300 rotate-[25deg]"></div>
+                <NavLink 
+                  to='/review'
+                  className={`hover:text-pink-500 ${activeTab === 'reviews' ? 'text-pink-500 font-bold' : 'text-gray-800'}`} 
+                  onClick={() => handleTabClick('reviews')}
+                >
+                  Reviews (03)
+                </NavLink>
               </div>
+            </div>
+
+
+            {/* Placeholder content based on active tab */}
+            <div className="mt-6 text-gray-600 w-[400px]">
+              {activeTab === 'description' && <p>{productSlice?.description}</p>}
+              {activeTab === 'shipping-returns' && <p>Shipping and returns information goes here.</p>}
+              {activeTab === 'reviews' && <p>Reviews content goes here.</p>}
+            </div>
           </div>
         </div>
-       
       </div>
     </>
   );

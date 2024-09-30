@@ -13,6 +13,7 @@ import { productData } from '../Slice/ProductSlice.js';
 
 
 const ShopComponent = () => {
+  // state the variables
   const [visibleCount, setVisibleCount]     = useState(9);
   const [sortedProducts, setSortedProducts] = useState(products.slice(0, 9));
   const navigate                            = useNavigate()
@@ -21,6 +22,9 @@ const ShopComponent = () => {
   // getting data from redux 
   const dispatch = useDispatch()
 
+  // setting data to the localhost
+  localStorage.setItem('productData', JSON.stringify(sortedProducts))
+ 
   const loadMoreProducts = () => {
     const newVisibleCount = visibleCount + 9;
     setVisibleCount(newVisibleCount);
@@ -53,8 +57,9 @@ const ShopComponent = () => {
 
 
   // =============== details functions
-  const handleDetails = () => {
+  const handleDetails = (data) => {
     navigate('/details')
+    dispatch(productData(data));
   }
 
   return (
@@ -145,7 +150,7 @@ const ShopComponent = () => {
 
                   {/* ======== details buttons */}
                   <button
-                   onClick={handleDetails}
+                   onClick={()=>handleDetails(product)}
                    className="bg-white border border-pink-600 text-pink-600 py-1 px-3 rounded hover:bg-pink-600 hover:text-white transition duration-300 transform hover:scale-105">
                     Details
                   </button>
