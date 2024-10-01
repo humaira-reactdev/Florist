@@ -1,4 +1,6 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import LayoutOne from './Layouts/LayoutOne'
 import Homepage from './Pages/Homepage'
 import LoginPage from './Pages/LoginPage'
