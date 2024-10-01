@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import HeadingComponent from "./HeadingComponent";
 import { getDatabase, ref, onValue } from "firebase/database";
+import { useNavigate } from 'react-router-dom';
+import jsPDF from "jspdf";
 
 const CheckoutComponent = () => {
+  const navigate = useNavigate();
   // State variables
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState({
@@ -34,6 +37,46 @@ const CheckoutComponent = () => {
       setProducts(arr);
     });
   }, [db]);
+
+  // Handle proceed to checkout
+  const handleproceed=(e)=>{
+    e.preventDefault();
+    const newErrors = {};
+
+    // Validate each field
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+    }
+    if (!formData.firstName) {
+      newErrors.firstName = "First name is required";
+    }
+    if (!formData.lastName) {
+      newErrors.lastName = "Last name is required";
+    }
+    if (!formData.contact) {
+      newErrors.contact = "Contact is required";
+    }
+    if (!formData.street) {
+      newErrors.street = "Street address is required";
+    }
+    if (!formData.city) {
+      newErrors.city = "City is required";
+    }
+    if (!formData.state) {
+      newErrors.state = "State is required";
+    }
+    if (!formData.postcode) {
+      newErrors.postcode = "Postcode is required";
+    }
+
+    // Set errors if there are any
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+    }else{
+      navigate('/proceed')
+    }
+   
+  }
 
   // Handle form submission
   const handleSubmit = (e) => {
@@ -71,11 +114,61 @@ const CheckoutComponent = () => {
       setErrors(newErrors);
     } else {
       // Handle successful submission (e.g., proceed to checkout)
-      console.log("Form submitted successfully:", formData);
-      setErrors({});
+       // Generate PDF invoice
+       generatePDF();
+       setErrors({});
     }
   };
 
+  const generatePDF = () => {
+    const doc = new jsPDF();
+  
+    // Load the logo 
+    const logo = new Image();
+    logo.src = "/images/logo.jpg"; 
+  
+    // When the logo is loaded, add it to the PDF
+    logo.onload = () => {
+      // Add the logo to the PDF (x, y, width, height)
+      doc.addImage(logo, "PNG", 14, 10, 40, 10); 
+  
+      // Title
+      doc.setFontSize(20);
+      doc.text("Invoice", 14, 40); 
+  
+      // User Information
+      doc.setFontSize(12);
+      doc.text(`Name: ${formData.firstName} ${formData.lastName}`, 14, 50);
+      doc.text(`Email: ${formData.email}`, 14, 60);
+      doc.text(`Contact: ${formData.contact}`, 14, 70);
+      doc.text(
+        `Address: ${formData.street}, ${
+          formData.apartment ? formData.apartment + ", " : ""
+        }${formData.city}, ${formData.state}, ${formData.postcode}`,
+        14, 80
+      );
+  
+      // Products
+      doc.text("Products:", 14, 100);
+      products.forEach((product, index) => {
+        doc.text(
+          `x${product.quantity} ${product.name} - $${product.price}`,
+          14,
+          110 + index * 10
+        );
+      });
+  
+      // Total
+      const total = products.reduce(
+        (total, product) => total + product.price * product.quantity,
+        0
+      );
+      doc.text(`Total: $${total}`, 14, 110 + products.length * 10 + 10);
+  
+      // Save the PDF
+      doc.save("invoice.pdf");
+    };
+  };
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     // Clear error for the current field
@@ -86,7 +179,7 @@ const CheckoutComponent = () => {
 
   return (
     <>
-      <HeadingComponent headingText="Cart" pageText="CART" />
+      <HeadingComponent headingText="Checkout" pageText="CHECKOUT" />
       <div className="flex flex-col md:flex-row justify-center p-10">
         <form className="w-full md:w-2/3 mb-8" onSubmit={handleSubmit}>
           <h2 className="text-2xl font-bold mb-4">Contact information</h2>
@@ -218,13 +311,7 @@ const CheckoutComponent = () => {
         </form>
 
         <div className="w-full md:w-1/3 ml-10 p-6 bg-gray-50 border border-gray-200 rounded-lg">
-          <h2 className="text-2xl font-bold mb-6">Your order</h2>
-          <input
-            type="text"
-            placeholder="Enter coupon code"
-            className="w-full border border-gray-300 rounded-lg p-3 mb-4"
-          />
-          <button className="bg-black text-white px-4 py-2 w-full mb-6">Apply</button>
+          
           {products.map((product) => (
             <div key={product.key} className="mb-4">
               <ul className="text-gray-600">
@@ -258,7 +345,7 @@ const CheckoutComponent = () => {
                </span>
             </div>
 
-            {/* Payment Methods */}
+            {/* Payment Methods
             <div className="mb-4">
               <label className="flex items-center mb-2">
                 <input type="checkbox" className="mr-2" /> Cheque Payment
@@ -266,9 +353,9 @@ const CheckoutComponent = () => {
               <label className="flex items-center">
                 <input type="checkbox" className="mr-2" /> PayPal
               </label>
-            </div>
+            </div> */}
 
-            <button className="w-full bg-black text-white py-3 rounded-lg mt-4">
+            <button onClick={handleproceed} className="w-full bg-black text-white py-3 rounded-lg mt-4">
               PROCEED TO CHECKOUT
             </button>
           </div>
