@@ -2,12 +2,18 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import HeadingComponent from './HeadingComponent';
+import { useNavigate } from 'react-router-dom';
 
 const ReviewComponent = () => {
   // Getting data from Redux 
   const productSlice = useSelector((state) => state.counter.value);
-  const [reviews, setReviews] = useState([]); // Local state for reviews
+  const [reviews, setReviews]     = useState([]); // Local state for reviews
   const [newReview, setNewReview] = useState({ name: '', rating: 1, comment: '' }); // Local state for new review
+
+
+  // use navigaete 
+  const navigate = useNavigate();
+
 
   // Handle form input change
   const handleInputChange = (e) => {
@@ -26,6 +32,11 @@ const ReviewComponent = () => {
       { id: prev.length + 1, ...newReview },
     ]);
     setNewReview({ name: '', rating: 1, comment: '' }); // Reset the form
+  };
+  
+   // dispatch to the details page
+   const handleReview = () => {
+    navigate('/review');
   };
 
   return ( 
@@ -85,6 +96,7 @@ const ReviewComponent = () => {
           />
         </div>
         <button
+          onClick={handleReview}
           type="submit"
           className="w-full bg-pink-500 text-white py-2 rounded-md hover:bg-pink-600 transition duration-200"
         >
