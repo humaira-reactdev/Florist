@@ -14,6 +14,7 @@ import DetailsPage from './Pages/DetailsPage'
 import ReviewPage from './Pages/ReviewPage'
 import ShippingPage from './Pages/shippingPage'
 import CheckoutPage from './Pages/CheckoutPage'
+import Proceed from './Pages/Proceed'
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
           <Route path='/review'       element={<ReviewPage/>}/>
           <Route path='/shipping'     element={<ShippingPage/>}/>
           <Route path='/checkout'     element={<CheckoutPage/>}/>
+          <Route path='/proceed'      element={<Proceed/>}/>
         </Route>
         <Route path='/login'      element={<LoginPage/>}/>
         <Route path='/signup'     element={<SignupPage/>}/>
