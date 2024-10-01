@@ -24,6 +24,14 @@ const Details = () => {
   // State for quantity
   const [quantity, setQuantity] = useState(1);
 
+   // State for currently displayed image
+   const [mainImage, setMainImage] = useState(productSlice?.img);
+
+    // Function to change main image
+  const handleImageClick = (img) => {
+    setMainImage(img);
+  };
+
   // Function to handle tab click
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -88,6 +96,8 @@ const Details = () => {
     }
   };
 
+ 
+
   return (
     <>
       <HeadingComponent headingText="Product detail" pageText="Product detail" />
@@ -98,27 +108,37 @@ const Details = () => {
             {/* Main Image */}
             <div className="w-[500px] h-[700px] mx-auto">
               <img
-                src={productSlice?.img}
+                src={mainImage} // Updated to use mainImage state
                 alt={productSlice?.name}
                 className="w-full h-full object-cover"
               />
-            </div>
-            {/* Thumbnails */}
-            <div className="flex flex-col space-y-5">
+              </div>
+             {/* Thumbnails */}
+             <div className="flex flex-col space-y-5">
               <img
                 src={productSlice?.img2}
                 alt={productSlice?.name}
-                className="w-16 h-16 object-cover"
+                className="w-16 h-16 object-cover cursor-pointer"
+                onClick={() => handleImageClick(productSlice?.img2)} // Change main image on click
               />
               <img
                 src={productSlice?.img3}
                 alt={productSlice?.name}
-                className="w-16 h-16 object-cover"
+                className="w-16 h-16 object-cover cursor-pointer"
+                onClick={() => handleImageClick(productSlice?.img3)} // Change main image on click
               />
               <img
                 src={productSlice?.img4}
                 alt={productSlice?.name}
-                className="w-16 h-16 object-cover"
+                className="w-16 h-16 object-cover cursor-pointer"
+                onClick={() => handleImageClick(productSlice?.img4)} // Change main image on click
+              />
+                {/* Main Image */}
+              <img
+                  src={productSlice?.img} // Updated to use mainImage state
+                  alt={productSlice?.name}
+                  className="w-16 h-16 object-cover cursor-pointer"
+                  onClick={() => handleImageClick(productSlice?.img)}
               />
             </div>
           </div>
@@ -128,7 +148,7 @@ const Details = () => {
             {/* Product Title and Price */}
             <div className="flex items-center justify-between">
               <h1 className="text-4xl font-bold">{productSlice?.name}</h1>
-              <p className="text-pink-500 text-3xl font-semibold">{productSlice?.price}</p>
+              <p className="text-pink-500 text-3xl font-semibold">${productSlice?.price}</p>
             </div>
 
             {/* Reviews */}
