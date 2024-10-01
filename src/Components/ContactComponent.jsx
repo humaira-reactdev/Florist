@@ -91,7 +91,7 @@ const ContactComponent = () => {
                     placeholder="Email"
                     value={email}
                     onChange={handleEmailChange} // Call the validation function on change
-                    className={`w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-400 ${emailError && 'border-red-500'}`}
+                    className={`w-full p-3 border border-gray-300  rounded outline-none focus:ring-2 focus:ring-gray-400 ${emailError && 'border-red-500'}`}
                   />
                   {/* Displaying error message */}
                   <p className="text-red-500">{emailError}</p>

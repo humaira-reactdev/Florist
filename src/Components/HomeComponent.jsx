@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import FooterComponent from './FooterComponent';
+import { useState, useEffect } from 'react';
+import { FaSearch, FaShoppingBag, FaHeart } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
+
 
 const HomeComponent = () => {
   // Array to store image URLs and corresponding banner text
@@ -35,6 +37,17 @@ const HomeComponent = () => {
     setCurrentIndex(index);
   };
 
+  // product functionality
+ const product = useSelector((state)=>state.counter.value)
+
+
+
+
+
+
+
+
+  
   return (
     <>
     {/* ==============BANNER PART START================== */}
@@ -151,101 +164,148 @@ const HomeComponent = () => {
 
       {/* ================items start================== */}
       <div className="items container flex justify-between gap-8 py-8">
-  <div className="relative">
-    <img src="/images/categories-1.jpg" alt="Fresh Flower" className="w-full h-full object-cover" />
-    <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-80 p-4 text-center">
-      <h3 className="text-lg font-semibold text-gray-900">Fresh Flower</h3>
-      <p className="text-gray-600">(25 items)</p>
-    </div>
-  </div>
-  <div className="relative">
-    <img src="/images/categories-2.jpg" alt="Succulent Plants" className="w-full h-full object-cover" />
-    <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-80 p-4 text-center">
-      <h3 className="text-lg font-semibold text-gray-900">Succulent Plants</h3>
-      <p className="text-gray-600">(162 items)</p>
-    </div>
-  </div>
-  <div className="relative">
-    <img src="/images/categories-3.jpg" alt="Cactus Plants" className="w-full h-full object-cover" />
-    <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-80 p-4 text-center">
-      <h3 className="text-lg font-semibold text-gray-900">Cactus Plants</h3>
-      <p className="text-gray-600">(58 items)</p>
-    </div>
-  </div>
-  <div className="relative">
-    <img src="/images/categories-4.jpg" alt="Furniture Tree" className="w-full h-full object-cover" />
-    <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-80 p-4 text-center">
-      <h3 className="text-lg font-semibold text-gray-900">Furniture Tree</h3>
-      <p className="text-gray-600">(25 items)</p>
-    </div>
-  </div>
-</div>
+        <div className="relative">
+          <img src="/images/categories-1.jpg" alt="Fresh Flower" className="w-full h-full object-cover" />
+          <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-80 p-4 text-center">
+            <h3 className="text-lg font-semibold text-gray-900">Fresh Flower</h3>
+            <p className="text-gray-600">(25 items)</p>
+          </div>
+        </div>
+        <div className="relative">
+          <img src="/images/categories-2.jpg" alt="Succulent Plants" className="w-full h-full object-cover" />
+          <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-80 p-4 text-center">
+            <h3 className="text-lg font-semibold text-gray-900">Succulent Plants</h3>
+            <p className="text-gray-600">(162 items)</p>
+          </div>
+        </div>
+        <div className="relative">
+          <img src="/images/categories-3.jpg" alt="Cactus Plants" className="w-full h-full object-cover" />
+          <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-80 p-4 text-center">
+            <h3 className="text-lg font-semibold text-gray-900">Cactus Plants</h3>
+            <p className="text-gray-600">(58 items)</p>
+          </div>
+        </div>
+        <div className="relative">
+          <img src="/images/categories-4.jpg" alt="Furniture Tree" className="w-full h-full object-cover" />
+          <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-80 p-4 text-center">
+            <h3 className="text-lg font-semibold text-gray-900">Furniture Tree</h3>
+            <p className="text-gray-600">(25 items)</p>
+          </div>
+        </div>
+      </div>
       {/* ================items end================== */}
 
       {/* ================about us start================== */}
           {/* About Us Section */}
-<div className="container mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 gap-8">
-  {/* Left Side - Title and Subtitle */}
-  <div>
-    <p className="text-pink-500 uppercase mb-4">About Us</p>
-    <h2 className="text-4xl font-bold text-gray-900 mb-6 leading-tight">
-      We provide all kinds of fresh flower services
-    </h2>
-  </div>
-  
-  {/* Right Side - Description */}
-  <div>
-    <p className="text-gray-600 leading-relaxed">
-      For Heather Henson, of Boreal Blooms in Cold Lake, Alberta, Canada, growing flowers that can be dried and incorporated into late fall and winter floral arrangements has been a game-changer. During her growing season, this farmer-florist relies on a vivid palette of annuals, perennials, and ornamental grasses to supply her studio.
-    </p>
-  </div>
-</div>
+        <div className="container mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Left Side - Title and Subtitle */}
+          <div>
+            <p className="text-pink-500 uppercase mb-4">About Us</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-6 leading-tight">
+              We provide all kinds of fresh flower services
+            </h2>
+          </div>
+          
+          {/* Right Side - Description */}
+          <div>
+            <p className="text-gray-600 leading-relaxed">
+              For Heather Henson, of Boreal Blooms in Cold Lake, Alberta, Canada, growing flowers that can be dried and incorporated into late fall and winter floral arrangements has been a game-changer. During her growing season, this farmer-florist relies on a vivid palette of annuals, perennials, and ornamental grasses to supply her studio.
+            </p>
+          </div>
+        </div>
 
-{/* Floral Insights Section */}
-<div className="container mx-auto px-4 py-16 flex flex-col md:flex-row items-center gap-[100px]">
-  {/* Left Side - Image with Play Button */}
-  <div className="relative">
-    <img
-      src="/images/about-video.jpg"
-      alt="Floral Insights"
-      className="w-full md:w-96 h-auto rounded-lg shadow-md"
-    />
-    {/* Play Button Overlay */}
-    <button className="absolute inset-0 flex items-center justify-center">
-      <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="currentColor"
-          className="w-8 h-8 text-pink-500"
-          viewBox="0 0 16 16"
-        >
-          <path d="M6.79 5.093a.5.5 0 0 1 .832-.374l4.829 3.407a.5.5 0 0 1 0 .841l-4.829 3.407a.5.5 0 0 1-.832-.374V5.093z" />
-        </svg>
+    {/* Floral Insights Section */}
+    <div className="container mx-auto px-4 py-16 flex flex-col md:flex-row items-center gap-[100px]">
+      {/* Left Side - Image with Play Button */}
+      <div className="relative">
+        <img
+          src="/images/about-video.jpg"
+          alt="Floral Insights"
+          className="w-full md:w-96 h-auto rounded-lg shadow-md"
+        />
+        {/* Play Button Overlay */}
+        <button className="absolute inset-0 flex items-center justify-center">
+          <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              className="w-8 h-8 text-pink-500"
+              viewBox="0 0 16 16"
+            >
+              <path d="M6.79 5.093a.5.5 0 0 1 .832-.374l4.829 3.407a.5.5 0 0 1 0 .841l-4.829 3.407a.5.5 0 0 1-.832-.374V5.093z" />
+            </svg>
+          </div>
+        </button>
       </div>
-    </button>
-  </div>
 
-  {/* Right Side - Text Content */}
-  <div className="flex-1">
-    <p className="text-pink-500 uppercase mb-4 tracking-widest">Slow Flowers' Floral Insights</p>
-    <h2 className="text-3xl font-bold text-gray-900 mb-6 leading-tight">
-      Dried flowers are having a renaissance
-    </h2>
-    <p className="text-gray-600 leading-relaxed mb-8">
-      This awareness has been stimulated by sustainable sourcing practices and the desire on the part of North American flower growers to “extend the season” beyond the last frost.
-    </p>
-    {/* Button */}
-    <button className="bg-pink-500 text-white py-3 px-6 rounded-full hover:bg-pink-600 transition duration-300">
-      Contact Us
-    </button>
-  </div>
-</div>
+        {/* Right Side - Text Content */}
+        <div className="flex-1">
+          <p className="text-pink-500 uppercase mb-4 tracking-widest">Slow Flowers' Floral Insights</p>
+          <h2 className="text-3xl font-bold text-gray-900 mb-6 leading-tight">
+            Dried flowers are having a renaissance
+          </h2>
+          <p className="text-gray-600 leading-relaxed mb-8">
+            This awareness has been stimulated by sustainable sourcing practices and the desire on the part of North American flower growers to “extend the season” beyond the last frost.
+          </p>
+          {/* Button */}
+          <button className="bg-pink-500 text-white py-3 px-6 rounded-full hover:bg-pink-600 transition duration-300">
+            Contact Us
+          </button>
+        </div>
+      </div>
 
 
 
       {/* ================about us end================== */}
 
       {/* ================All products start================== */}
+      <div className="container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-4 mb-20">
+          <div className="relative group">
+            <img
+              src={product?.img}
+              alt="Product Name" // Replace with the actual product name
+              className="w-full h-64 object-cover rounded-lg"
+            />
+
+            <div className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded">
+              New
+            </div>
+
+            <div className="absolute top-[20%] inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 space-x-4">
+              <div className="p-3 rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
+                <FaSearch className="w-4 h-4" />
+              </div>
+              <div className="p-3 rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
+                <FaShoppingBag className="w-4 h-4" />
+              </div>
+              <div className="p-3 rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
+                <FaHeart className="w-4 h-4" />
+              </div>
+            </div>
+
+            <div className="text-center mt-4">
+              <h2 className="text-lg md:text-xl font-bold text-gray-800 group-hover:text-gray-500 transition-transform duration-300">
+                Product Name
+              </h2>
+              <div className="flex flex-col items-center transition-transform duration-500 group-hover:-translate-x-4">
+                <div className="flex gap-4 items-center transition-opacity duration-500 group-hover:opacity-0">
+                  <span className="text-lg text-gray-800">$99.99</span>
+                  <span className="text-red-500 line-through">$129.99</span>
+                </div>
+                <div className="flex gap-2 mt-2 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                  <button 
+                    className="bg-pink-600 text-white py-1 px-3 rounded transition duration-300 transform hover:scale-105 hover:bg-white hover:text-pink-600 hover:shadow-lg hover:border hover:border-pink-600">
+                    Add to Cart
+                  </button>
+                  <button
+                    className="bg-white border border-pink-600 text-pink-600 py-1 px-3 rounded hover:bg-pink-600 hover:text-white transition duration-300 transform hover:scale-105">
+                    Details
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
 
 
