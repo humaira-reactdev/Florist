@@ -6,7 +6,8 @@ import { AiOutlineMenu } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { productData } from '../Slice/ProductSlice.js';
-import { getDatabase, ref, set, onValue } from "firebase/database";
+import {get, getDatabase, ref, set, onValue } from "firebase/database";
+
 
 const ShopComponent = () => {
   const [visibleCount, setVisibleCount] = useState(9);
@@ -41,12 +42,13 @@ const ShopComponent = () => {
     setSortedProducts(sorted.slice(0, visibleCount));
   };
 
-  // Add to cart function with check for existing product
-  const handleCart = (data) => {
-    const cartRef = ref(db, `cartProduct/${data.id}`);
+ // Add to cart function with check for existing product
+const handleCart = (data) => {
+  const cartRef = ref(db, `cartProduct/${data.id}`);
 
-    // Check if product is already in the cart
-    onValue(cartRef, (snapshot) => {
+  // Check if product is already in the cart using 'get' instead of 'onValue'
+  get(cartRef)
+    .then((snapshot) => {
       if (snapshot.exists()) {
         // If product exists, increment its quantity
         const currentQuantity = snapshot.val().quantity || 1;
@@ -64,15 +66,17 @@ const ShopComponent = () => {
           discount: data.discount,
           img: data.img,
           stock: data.stock,
-          quantity: 1,
+          quantity: 1, // Set initial quantity to 1
         });
       }
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
     });
 
-    navigate('/cart');
-    dispatch(productData(data));
-  };
-
+  navigate('/cart');
+  dispatch(productData(data));
+};
   // Details function
   const handleDetails = (data) => {
     navigate('/details');
