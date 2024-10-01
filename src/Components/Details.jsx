@@ -4,17 +4,88 @@ import HeadingComponent from './HeadingComponent';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { productData } from '../Slice/ProductSlice.js';
+import { getDatabase, ref, set, get } from "firebase/database";
 
 const Details = () => {
   // Getting data from Redux 
   const productSlice = useSelector((state) => state.counter.value);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   
+  // Firebase variables
+  const db = getDatabase();
+
   // State for active tab
   const [activeTab, setActiveTab] = useState('description'); // Default to 'description'
+
+  // State for quantity
+  const [quantity, setQuantity] = useState(1);
 
   // Function to handle tab click
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+  };
+
+  // Function to increase quantity
+  const handleIncrease = () => {
+    setQuantity(quantity + 1);
+  };
+
+  // Function to decrease quantity
+  const handleDecrease = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  // Add to cart function with check for existing product
+  const handleCart = async (data) => {
+    const cartRef = ref(db, `cartProduct/${data.id}`);
+
+    try {
+      // Fetch the current cart data
+      const snapshot = await get(cartRef);
+
+      if (snapshot.exists()) {
+        // If the product exists, update its quantity by adding the selected quantity
+        const currentQuantity = snapshot.val().quantity || 1;
+
+        console.log("Current quantity in cart:", currentQuantity); // Debugging info
+        console.log("Adding quantity:", quantity); // Debugging info
+
+        await set(cartRef, {
+          ...snapshot.val(),
+          quantity: currentQuantity + quantity, // Add the selected quantity
+        });
+
+        console.log("Updated quantity in Firebase:", currentQuantity + quantity); // Debugging info
+
+      } else {
+        // If the product doesn't exist, add it with the selected quantity
+        await set(cartRef, {
+          Id: data.id,
+          name: data.name,
+          price: data.price,
+          originalPrice: data.originalPrice,
+          discount: data.discount,
+          img: data.img,
+          stock: data.stock,
+          quantity: quantity, // Add the selected quantity
+        });
+
+        console.log("New product added with quantity:", quantity); // Debugging info
+      }
+
+      // Navigate to the cart page and dispatch the product data
+      navigate('/cart');
+      dispatch(productData(data));
+      
+    } catch (error) {
+      console.error("Error adding to cart: ", error);
+    }
   };
 
   return (
@@ -89,21 +160,27 @@ const Details = () => {
             {/* Quantity Selector and Add to Cart Button */}
             <div className="flex items-center space-x-6 pt-8 pb-8">
               <div className="flex items-center border border-gray-300 rounded-full overflow-hidden">
-                <button className="px-4 py-3 bg-gray-100">
+                <button 
+                  className="px-4 py-3 bg-gray-100"
+                  onClick={handleDecrease}
+                >
                   <FiMinus className="text-gray-700 text-xl" />
                 </button>
                 <input
                   type="number"
                   className="w-16 text-center border-l border-r border-gray-300 text-lg"
-                  value="1"
+                  value={quantity}
                   readOnly
                 />
-                <button className="px-4 py-3 bg-gray-100">
+                <button 
+                  className="px-4 py-3 bg-gray-100"
+                  onClick={handleIncrease}
+                >
                   <FiPlus className="text-gray-700 text-xl" />
                 </button>
               </div>
 
-              <button className="flex items-center px-8 py-3 bg-black text-white text-lg font-bold rounded-full">
+              <button onClick={() => handleCart(productSlice)} className="flex items-center px-8 py-3 bg-black text-white text-lg font-bold rounded-full">
                 <AiOutlineShoppingCart className="w-6 h-6 mr-2" />
                 Add to Cart
               </button>
@@ -139,17 +216,15 @@ const Details = () => {
                   className={`hover:text-pink-500 ${activeTab === 'reviews' ? 'text-pink-500 font-bold' : 'text-gray-800'}`} 
                   onClick={() => handleTabClick('reviews')}
                 >
-                  Reviews (03)
+                  Reviews
                 </NavLink>
               </div>
-            </div>
 
-
-            {/* Placeholder content based on active tab */}
-            <div className="mt-6 text-gray-600 w-[400px]">
-              {activeTab === 'description' && <p>{productSlice?.description}</p>}
-              {activeTab === 'shipping-returns' && <p>Shipping and returns information goes here.</p>}
-              {activeTab === 'reviews' && <p>Reviews content goes here.</p>}
+              <div className="pt-8">
+                {activeTab === 'description' && <p>{productSlice?.description}</p>}
+                {activeTab === 'shipping-returns' && <p>Shipping and returns info here.</p>}
+                {activeTab === 'reviews' && <p>Reviews will be displayed here.</p>}
+              </div>
             </div>
           </div>
         </div>
