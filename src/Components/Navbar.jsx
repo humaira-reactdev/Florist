@@ -3,12 +3,38 @@ import { CiSearch } from "react-icons/ci";
 import { IoPersonOutline } from "react-icons/io5";
 import { PiHandbag } from "react-icons/pi";
 import { CiHeart } from "react-icons/ci";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FiMenu } from 'react-icons/fi';
 import { IoMdClose } from 'react-icons/io';
+import { getDatabase, ref, onValue } from "firebase/database";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [wishlistCount, setWishlistCount] = useState(0);
+  const [cartCount, setCartCount] = useState(0);
+
+  // Initialize Firebase database
+  const db = getDatabase();
+
+  // Fetching data from database
+  useEffect(() => {
+    const wishlistRef = ref(db, 'wishlist/'); // Adjust path according to your database structure
+    const cartRef = ref(db, 'cart/'); // Adjust path according to your database structure
+
+    // Listen for changes to wishlist data
+    onValue(wishlistRef, (snapshot) => {
+      const data = snapshot.val();
+      // Assuming the wishlist data is an array of items, update the count
+      setWishlistCount(data ? Object.keys(data).length : 0);
+    });
+
+    // Listen for changes to cart data
+    onValue(cartRef, (snapshot) => {
+      const data = snapshot.val();
+      // Assuming the cart data is an array of items, update the count
+      setCartCount(data ? Object.keys(data).length : 0);
+    });
+  }, [db]);
 
   return (
     <>
@@ -29,10 +55,33 @@ const Navbar = () => {
           </div>
 
           {/* Icons */}
-          <div className="flex items-center space-x-4 lg:space-x-6 text-[25px]">
-            <CiSearch className='' />
-            <CiHeart className='' />
-            <Link to='/cart'><PiHandbag /></Link>
+          <div className="relative flex items-center space-x-4 lg:space-x-6 text-[25px]">
+            <CiSearch />
+
+            {/* Wishlist Icon with Quantity */}
+            <div className="relative">
+            <Link to='/wishlist'>
+              <CiHeart />
+              {wishlistCount > 0 && (
+                <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                  {wishlistCount}
+                </span>
+              )}
+              </Link>
+            </div>
+
+            {/* Cart Icon with Quantity */}
+            <div className="relative">
+              <Link to='/cart'>
+                <PiHandbag />
+                {cartCount > 0 && (
+                  <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
+            </div>
+
             <IoPersonOutline />
             <Link to='/login' className='hidden lg:block text-[15px] font-semibold hover:text-pink-500 hover:underline'>Sign in</Link>
           </div>
