@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaSearch, FaShoppingBag, FaHeart } from 'react-icons/fa';
 import products from '../ProductData.js';
 import { useNavigate } from 'react-router-dom';
@@ -250,7 +250,6 @@ const HomeComponent = () => {
   };
 
 
-
   // ============================== All products Functions end==============================
 
   // navigate to cart
@@ -297,15 +296,15 @@ const HomeComponent = () => {
           {/* Text Overlay (moved to the left side) */}
           <div className="absolute inset-y-0 left-[3%] flex flex-col justify-center items-start text-left text-white p-6 sm:p-4 md:p-6 lg:p-8">
             <div className="container">
-              <p className="text-md sm:text-sm md:text-md mb-2 uppercase text-black">
+              <p className="text-[9px] md:text-md lg:text-xl mb-2 lg:mb-9 uppercase text-black">
                 {slide.subtitle}
               </p>
-              <h1 className="text-2xl sm:text-xl md:text-3xl lg:text-4xl font-bold mb-4 sm:mb-2 md:mb-4 lg:mb-6 w-[350px] sm:w-[300px] md:w-[400px] lg:w-[450px] text-black">
+              <h1 className="text-sm md:text-3xl lg:text-4xl font-bold mb-1 md:mb-4 lg:mb-10 w-[200px]  md:w-[400px] lg:w-[500px] text-black">
                 {slide.heading}
               </h1>
               <button
                 onClick={handleShop}
-                className="bg-pink-500 text-white px-4 sm:px-3 md:px-4 lg:px-5 py-2 rounded-[40px] hover:bg-pink-600 uppercase text-[10px] sm:text-[8px] md:text-[10px] lg:text-[12px] font-semibold transform transition duration-300 hover:scale-105"
+                className="bg-pink-500 text-white px-3 md:px-4 lg:px-5 py-2 rounded-[40px] hover:bg-pink-600 uppercase text-[8px] md:text-[10px] lg:text-[12px] font-semibold transform transition duration-300 hover:scale-105"
               >
                 {slide.buttonText}
               </button>
@@ -411,7 +410,7 @@ const HomeComponent = () => {
           {/* Left Side - Title and Subtitle */}
           <div>
             <p className="text-pink-500 uppercase mb-4">About Us</p>
-            <h2 className="text-4xl font-bold text-gray-900 mb-6 leading-tight w-[400px]">
+            <h2 className="text-4xl sm:text-xl lg:3xl font-bold text-gray-900 mb-6 leading-tight w-[300px] lg:w-[400px]">
               We provide all kinds of fresh flower services
             </h2>
           </div>
@@ -506,9 +505,9 @@ const HomeComponent = () => {
 
         {/*============ icons ==============  */}
         <div className="absolute top-[20%] inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 space-x-4">
-          <div className="p-3 rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
-            <FaSearch className="w-4 h-4" />
-          </div>
+          {/* <div className="p-3 rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
+            <FaSearch className="w-4 h-4" onClick={handleSearchClick} />
+          </div> */}
           <div className="p-3 rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
             <FaShoppingBag className="w-4 h-4" onClick={() => handleCart(product)} />
           </div>
