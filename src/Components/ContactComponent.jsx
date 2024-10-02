@@ -25,7 +25,7 @@ const ContactComponent = () => {
   const sendEmail = () => {
     const templateParams = {
       user_email: email,
-      user_message: message,
+      message: message,
     };
 
     emailjs.send(
@@ -108,6 +108,7 @@ const ContactComponent = () => {
                 <input
                   type="email"
                   placeholder="Email"
+                  name='email'
                   value={email}
                   onChange={handleEmailChange} // Call the validation function on change
                   className={`w-full p-3 border border-gray-300 rounded focus:outline-none  ${emailError && 'border-red-500'}`}
@@ -118,6 +119,7 @@ const ContactComponent = () => {
                 <textarea
                   rows="3"
                   placeholder="Message"
+                  name='message'
                   value={message}
                   onChange={handleMessageChange}
                   className="w-full p-3 border border-gray-300 rounded focus:outline-none"
