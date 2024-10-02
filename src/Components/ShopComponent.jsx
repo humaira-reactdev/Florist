@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FaSearch, FaShoppingBag, FaHeart } from 'react-icons/fa';
+import {  FaShoppingBag, FaHeart } from 'react-icons/fa';
 import HeadingComponent from './HeadingComponent';
 import products from '../ProductData.js';
 import { AiOutlineMenu } from 'react-icons/ai';
@@ -183,9 +183,9 @@ const ShopComponent = () => {
     <>
       <HeadingComponent headingText={'Shop'} pageText={'SHOP'} />
       <div className="p-4 md:p-8">
-
-        <div className='container flex justify-between items-center'>
-          <div className="flex items-center space-x-2 mt-20">
+     
+        <div className='container flex justify-between items-center sm:flex-wrap'>
+          <div className="flex items-center space-x-2 mt-20 mb-8">
             <div className="p-2 bg-gray-100 rounded">
               <AiOutlineMenu className="w-5 h-5 text-black" />
             </div>
@@ -194,16 +194,16 @@ const ShopComponent = () => {
               Showing <span className="font-semibold">1-9</span> of <span className="font-semibold">20</span> results
             </div>
           </div>
-
-          <div className="flex flex-wrap justify-end mt-8">
+       
+          <div className="flex justify-end mt-9">
             <select className="py-2 px-5 outline-none border rounded" onChange={(e) => handleSort(e.target.value)}>
               <option value="default">Sort by popularity</option>
               <option value="az">A-Z</option>
               <option value="priceLowHigh">Price Low to High</option>
               <option value="priceHighLow">Price High to Low</option>
             </select>
-          </div>
-        </div>
+           </div>
+         </div>
 
         <div className="container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-4 mb-20">
           {sortedProducts.map((product) => (
@@ -221,9 +221,9 @@ const ShopComponent = () => {
               )}
 
               <div className="absolute top-[20%] inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 space-x-4">
-                <div className="p-3 cursor-pointer rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
+                {/* <div className="p-3 cursor-pointer rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
                   <FaSearch className="w-4 h-4" />
-                </div>
+                </div> */}
                 <div className="p-3 cursor-pointer rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
                   <FaShoppingBag className="w-4 h-4" onClick={() => handleCart(product)} />
                 </div>

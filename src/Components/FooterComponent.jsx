@@ -43,7 +43,7 @@ const FooterComponent = () => {
         {/* Logo Section */}
         <div className="mb-10 flex flex-col md:flex-row justify-between items-center">
           <h2 className="text-5xl md:text-6xl font-bold text-black mb-4 md:mb-0">
-            Florist<span className="text-pink-500 text-6xl">🌸</span>
+            Florist<span className="text-pink-500 text-6xl"><sup>🌸</sup></span>
           </h2>
           <p className="text-gray-700 text-center md:text-left w-full md:w-[600px] text-lg md:text-xl">
             The floristry business has a significant market in the corporate and social event world, as flowers

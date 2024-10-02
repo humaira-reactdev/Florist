@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { productData } from '../Slice/ProductSlice.js';
 import { getDatabase, ref, set, get } from "firebase/database";
+import { Bounce, toast } from 'react-toastify';
 
 const Details = () => {
   // Getting data from Redux 
@@ -19,7 +20,7 @@ const Details = () => {
   const db = getDatabase();
 
   // State for active tab
-  const [activeTab, setActiveTab] = useState('description'); // Default to 'description'
+  const [activeTab, setActiveTab] = useState('description'); 
 
   // State for quantity
   const [quantity, setQuantity] = useState(1);
@@ -96,6 +97,80 @@ const Details = () => {
     }
   };
 
+    // Add to wishlist function with check for existing product
+    const handleWishList = (data) => {
+      // Check if the product already exists in the wishlist using 'get'
+      const wishlistRef = ref(db, `wishlistProduct/${data.id}`);
+  
+      get(wishlistRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            // Product already exists in the wishlist, show toast message
+            toast.warning('This product is already in your wishlist!', {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              transition: Bounce,
+            });
+          } else {
+            // Add product to the wishlist if it doesn't exist already
+            set(wishlistRef, {
+              id: data.id,
+              name: data.name,
+              price: data.price,
+              originalPrice: data.originalPrice,
+              discount: data.discount,
+              img: data.img,
+              stock: data.stock,
+            })
+              .then(() => {
+                // Show success toast
+                toast.success('Product added to your wishlist!', {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  transition: Bounce,
+                });
+  
+                // Optionally navigate to the wishlist page after successful addition
+                navigate('/wishlist');
+  
+                // Optionally dispatch product data to Redux or other state management if needed
+                dispatch(productData(data));
+              })
+              .catch((error) => {
+                // Handle any errors that occur during the wishlist addition process
+                console.error("Error adding to wishlist:", error);
+                toast.error('Error adding product to wishlist.', {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  transition: Bounce,
+                });
+              });
+          }
+        })
+        .catch((error) => {
+          // Handle errors during the wishlist check process
+          console.error("Error fetching wishlist data:", error);
+        });
+    };
+
  
 
   return (
@@ -160,8 +235,7 @@ const Details = () => {
                 ))}
               </div>
               <div className="flex items-center space-x-2">
-                <p className="text-lg text-gray-600">(reviews)</p>
-                <a href="#" className="text-lg text-pink-500">Write a review</a>
+                <a href="/review" className="text-lg text-pink-500">Write a review</a>
               </div>
             </div>
 
@@ -206,7 +280,7 @@ const Details = () => {
               </button>
 
               <button className="p-3 bg-gray-200 rounded-full">
-                <AiOutlineHeart className="w-6 h-6 text-gray-500" />
+                <AiOutlineHeart className="w-6 h-6 text-gray-500" onClick={() => handleWishList(productSlice)}  />
               </button>
             </div>
              
@@ -216,9 +290,8 @@ const Details = () => {
             <div className="pt-[50px]">
               <div className="flex items-center flex-wrap space-x-6 text-[20px] font-normal">
                 <NavLink 
-                  to="/description" 
+                  to="/details" 
                   className={`hover:text-pink-500 ${activeTab === 'description' ? 'text-pink-500 font-bold' : 'text-gray-800'}`} 
-                  onClick={() => handleTabClick('description')}
                 >
                   Description
                 </NavLink>
