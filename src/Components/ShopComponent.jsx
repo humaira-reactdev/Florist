@@ -7,22 +7,28 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { productData } from '../Slice/ProductSlice.js';
 import { get, getDatabase, ref, set } from "firebase/database";
+import { Bounce, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ShopComponent = () => {
+  // state variables
   const [visibleCount, setVisibleCount] = useState(9);
   const [sortedProducts, setSortedProducts] = useState(products.slice(0, 9));
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const db = getDatabase();
-
+ 
+  // set data to the local storage
   localStorage.setItem('productData', JSON.stringify(sortedProducts));
 
+  // function for more products
   const loadMoreProducts = () => {
     const newVisibleCount = visibleCount + 9;
     setVisibleCount(newVisibleCount);
     setSortedProducts(products.slice(0, newVisibleCount));
   };
 
+  // function for sorting products
   const handleSort = (sortType) => {
     let sorted = [];
     switch (sortType) {
@@ -41,47 +47,131 @@ const ShopComponent = () => {
     setSortedProducts(sorted.slice(0, visibleCount));
   };
 
-  // Add to cart function with check for existing product and stock availability
-  const handleCart = (data) => {
+   // Add to cart function with check for existing product
+   const handleCart = (data) => {
     // Check if the product is in stock
     if (data.stock <= 0) {
-      alert('This product is currently out of stock.');
+      toast.info('This product is currently out of stock.', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
       return; // Exit the function if the product is out of stock
     }
+    
+  // Check if the product already exists in the cart using 'get' instead of 'onValue'
+  const cartRef = ref(db, `cartProduct/${data.id}`);
 
-    const cartRef = ref(db, `cartProduct/${data.id}`);
+  get(cartRef)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const currentQuantity = snapshot.val().quantity || 1;
+        set(cartRef, {
+          ...snapshot.val(),
+          quantity: currentQuantity + 1,
+        });
+      } else {
+        set(cartRef, {
+          Id: data.id,
+          name: data.name,
+          price: data.price,
+          originalPrice: data.originalPrice,
+          discount: data.discount,
+          img: data.img,
+          stock: data.stock,
+          quantity: 1,
+        });
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
 
-    // Check if product is already in the cart using 'get' instead of 'onValue'
-    get(cartRef)
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          // If product exists, increment its quantity
-          const currentQuantity = snapshot.val().quantity || 1;
-          set(cartRef, {
-            ...snapshot.val(),
-            quantity: currentQuantity + 1,
-          });
-        } else {
-          // If product doesn't exist, add it with quantity 1
-          set(cartRef, {
-            Id: data.id,
-            name: data.name,
-            price: data.price,
-            originalPrice: data.originalPrice,
-            discount: data.discount,
-            img: data.img,
-            stock: data.stock,
-            quantity: 1, // Set initial quantity to 1
-          });
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+        navigate('/cart');
+        dispatch(productData(data));
+      };
 
-    navigate('/cart');
-    dispatch(productData(data));
-  };
+
+
+     // Add to wishlist function with check for existing product
+     const handleWishList = (data) => {
+      // Check if the product already exists in the wishlist using 'get'
+      const wishlistRef = ref(db, `wishlistProduct/${data.id}`);
+  
+      get(wishlistRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            // Product already exists in the wishlist, show toast message
+            toast.warning('This product is already in your wishlist!', {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              transition: Bounce,
+            });
+          } else {
+            // Add product to the wishlist if it doesn't exist already
+            set(wishlistRef, {
+              id: data.id,
+              name: data.name,
+              price: data.price,
+              originalPrice: data.originalPrice,
+              discount: data.discount,
+              img: data.img,
+              stock: data.stock,
+            })
+              .then(() => {
+                // Show success toast
+                toast.success('Product added to your wishlist!', {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  transition: Bounce,
+                });
+  
+                // Optionally navigate to the wishlist page after successful addition
+                navigate('/wishlist');
+  
+                // Optionally dispatch product data to Redux or other state management if needed
+                dispatch(productData(data));
+              })
+              .catch((error) => {
+                // Handle any errors that occur during the wishlist addition process
+                console.error("Error adding to wishlist:", error);
+                toast.error('Error adding product to wishlist.', {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  transition: Bounce,
+                });
+              });
+          }
+        })
+        .catch((error) => {
+          // Handle errors during the wishlist check process
+          console.error("Error fetching wishlist data:", error);
+        });
+    };
 
   // Details function
   const handleDetails = (data) => {
@@ -131,14 +221,14 @@ const ShopComponent = () => {
               )}
 
               <div className="absolute top-[20%] inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 space-x-4">
-                <div className="p-3 rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
+                <div className="p-3 cursor-pointer rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
                   <FaSearch className="w-4 h-4" />
                 </div>
-                <div className="p-3 rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
+                <div className="p-3 cursor-pointer rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
                   <FaShoppingBag className="w-4 h-4" onClick={() => handleCart(product)} />
                 </div>
-                <div className="p-3 rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
-                  <FaHeart className="w-4 h-4" />
+                <div className="p-3 cursor-pointer rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
+                  <FaHeart onClick={() => handleWishList(product)} className="w-4 h-4" />
                 </div>
               </div>
 

@@ -1,4 +1,6 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import LayoutOne from './Layouts/LayoutOne'
 import Homepage from './Pages/Homepage'
 import LoginPage from './Pages/LoginPage'
@@ -15,6 +17,7 @@ import ReviewPage from './Pages/ReviewPage'
 import ShippingPage from './Pages/shippingPage'
 import CheckoutPage from './Pages/CheckoutPage'
 import Proceed from './Pages/Proceed'
+import WishListPage from './Pages/WishListPage';
 
 function App() {
 
@@ -32,6 +35,7 @@ function App() {
           <Route path='/review'       element={<ReviewPage/>}/>
           <Route path='/shipping'     element={<ShippingPage/>}/>
           <Route path='/checkout'     element={<CheckoutPage/>}/>
+          <Route path='/wishlist'     element={<WishListPage/>}/>
           <Route path='/proceed'      element={<Proceed/>}/>
         </Route>
         <Route path='/login'      element={<LoginPage/>}/>

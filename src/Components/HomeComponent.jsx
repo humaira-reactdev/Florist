@@ -163,6 +163,81 @@ const HomeComponent = () => {
     dispatch(productData(data));
   };
 
+   // Add to wishlist function with check for existing product
+   const handleWishList = (data) => {
+    // Check if the product already exists in the wishlist using 'get'
+    const wishlistRef = ref(db, `wishlistProduct/${data.id}`);
+
+    get(wishlistRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          // Product already exists in the wishlist, show toast message
+          toast.warning('This product is already in your wishlist!', {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
+        } else {
+          // Add product to the wishlist if it doesn't exist already
+          set(wishlistRef, {
+            id: data.id,
+            name: data.name,
+            price: data.price,
+            originalPrice: data.originalPrice,
+            discount: data.discount,
+            img: data.img,
+            stock: data.stock,
+          })
+            .then(() => {
+              // Show success toast
+              toast.success('Product added to your wishlist!', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+              });
+
+              // Optionally navigate to the wishlist page after successful addition
+              navigate('/wishlist');
+
+              // Optionally dispatch product data to Redux or other state management if needed
+              dispatch(productData(data));
+            })
+            .catch((error) => {
+              // Handle any errors that occur during the wishlist addition process
+              console.error("Error adding to wishlist:", error);
+              toast.error('Error adding product to wishlist.', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+              });
+            });
+        }
+      })
+      .catch((error) => {
+        // Handle errors during the wishlist check process
+        console.error("Error fetching wishlist data:", error);
+      });
+  };
+
+
   // Handle category selection
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
@@ -173,6 +248,8 @@ const HomeComponent = () => {
       setSortedProducts(filteredProducts);
     }
   };
+
+
 
   // ============================== All products Functions end==============================
 
@@ -427,6 +504,7 @@ const HomeComponent = () => {
                 </div>
               )}
 
+        {/*============ icons ==============  */}
         <div className="absolute top-[20%] inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 space-x-4">
           <div className="p-3 rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
             <FaSearch className="w-4 h-4" />
@@ -434,8 +512,11 @@ const HomeComponent = () => {
           <div className="p-3 rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
             <FaShoppingBag className="w-4 h-4" onClick={() => handleCart(product)} />
           </div>
-          <div className="p-3 rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
-            <FaHeart className="w-4 h-4" />
+           <div className="p-3 rounded-full transition-all duration-500 bg-white text-black hover:bg-pink-500 hover:text-white hover:rotate-180">
+            <FaHeart
+              onClick={() => handleWishList(product)}
+              className="w-4 h-4 cursor-pointer"
+            />
           </div>
         </div>
 
@@ -450,6 +531,8 @@ const HomeComponent = () => {
                 <span className="text-red-500 line-through">${product.originalPrice}</span>
               )}
             </div>
+
+            {/* ============ buttons ============= */}
             <div className="flex gap-2 mt-2 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
               <button
                 onClick={() => handleCart(product)}

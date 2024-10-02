@@ -1,4 +1,5 @@
 import { FaInstagram } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const FollowUscomponent = () => {
   return (
@@ -13,10 +14,10 @@ const FollowUscomponent = () => {
             <img className="w-full h-full object-cover" src={`./images/${imgSrc}`} alt="insta" />
             
             {/* Hover Content */}
-            <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex flex-col justify-center items-center transition-opacity duration-300 rounded-md">
-              <FaInstagram className="text-white text-4xl mb-2" />
-              <p className="text-white text-lg">Follow us @florist</p>
-            </div>
+              <Link className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex flex-col justify-center items-center transition-opacity duration-300 rounded-md" to="https://www.instagram.com/____.flowershop.____/?hl=en" target='_blank'> 
+                <FaInstagram className="text-white text-4xl mb-2" />
+                <p className="text-white text-lg">Follow us @florist</p>
+              </Link>
           </div>
         ))}
       </div>
