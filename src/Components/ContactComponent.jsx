@@ -1,12 +1,13 @@
 import HeadingComponent from './HeadingComponent';
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import { useState } from 'react';
+import emailjs from 'emailjs-com';
 
 const ContactComponent = () => {
-  const [email, setEmail]                = useState('');
-  const [emailError, setEmailError]      = useState('');
-  const [message, setMessage]            = useState('');
-  const [messageError, setMessageError]  = useState('');
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [message, setMessage] = useState('');
+  const [messageError, setMessageError] = useState('');
 
   // Email validation
   const handleEmailChange = (e) => {
@@ -20,23 +21,44 @@ const ContactComponent = () => {
     setMessageError('');
   };
 
-  // Form validation
+  // Send email using EmailJS
+  const sendEmail = () => {
+    const templateParams = {
+      user_email: email,
+      user_message: message,
+    };
+
+    emailjs.send(
+      import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+      templateParams,
+      import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+    )
+      .then((response) => {
+        console.log('SUCCESS!', response.status, response.text);
+        alert('Email sent successfully!');
+      }, (error) => {
+        console.log('FAILED...', error);
+        alert('Failed to send email. Please try again.');
+      });
+  };
+
+  // Form validation and submission
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent page refresh
 
-    // Validate email
+    // Validate email and message
     if (!email) {
       setEmailError('Email is required');
-    } else {
-      if (!message) {
-        setMessageError('Message is required');
-        return;
-      }
+      return;
+    }
+    if (!message) {
+      setMessageError('Message is required');
+      return;
     }
 
-    // Handle form submission (e.g., send data to an API)
-    console.log('Email:', email);
-    console.log('Message:', message);
+    // Send email using the EmailJS service
+    sendEmail();
 
     // Clear form after submission
     setEmail('');
@@ -133,4 +155,3 @@ const ContactComponent = () => {
 };
 
 export default ContactComponent;
-
