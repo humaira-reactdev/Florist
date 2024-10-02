@@ -14,7 +14,7 @@ import ForgotPasswordPage from './Pages/ForgotPasswordPage'
 import { ToastContainer } from 'react-toastify'
 import DetailsPage from './Pages/DetailsPage'
 import ReviewPage from './Pages/ReviewPage'
-import ShippingPage from './Pages/shippingPage'
+import ShippingPage from './Pages/ShippingPage'
 import CheckoutPage from './Pages/CheckoutPage'
 import Proceed from './Pages/Proceed'
 import WishListPage from './Pages/WishListPage';

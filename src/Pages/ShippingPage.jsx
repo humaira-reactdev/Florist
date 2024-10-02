@@ -1,4 +1,4 @@
-import ShippingComponent from "../Components/shippingComponent"
+import ShippingComponent from "../Components/ShippingComponent"
 
 
 const ShippingPage = () => {
